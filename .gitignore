@@ -1,0 +1,33 @@
+# Local login sessions, account settings, receipts, and logs
+.local/
+*.log
+.env
+.env.*
+*.pem
+*.key
+
+# Installed dependencies and generated Python caches
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+
+# Development artifacts and local backups
+/test_*.py
+/tests/
+.pytest_cache/
+.coverage
+htmlcov/
+test-results/
+playwright-report/
+*.zip
+*.bak
+*.tmp
+/本次批量跟价结果.md
+
+# Local editor and Windows metadata
+.idea/
+.vscode/
+Thumbs.db
+desktop.ini
+.DS_Store

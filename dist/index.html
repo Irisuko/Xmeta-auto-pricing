@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Xmeta 跟价助手：检查在售价格、设置最低售价、预览跟价建议。">
+  <title>Xmeta 跟价助手</title>
+  <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+  <aside class="sidebar">
+    <a class="brand" href="./" aria-label="跟价助手首页"><span class="brand-icon">X</span><span>Xmeta<span class="brand-sub">跟价助手</span></span></a>
+    <div class="side-label">工作台</div><a class="nav-item selected" href="#listings"><span>▦</span> 我的跟价</a><a class="nav-item" href="#activity"><span>◷</span> 检查记录</a>
+    <div class="sidebar-note"><span class="status-dot"></span> 本机规则面板<p>价格底线，由你决定。</p></div>
+    <a class="platform-link" href="https://xmeta.x-metash.cn/prod/xmeta_mall/index.html#/pages/main/index" target="_blank" rel="noopener noreferrer">打开 Xmeta 平台 ↗</a>
+  </aside>
+  <main>
+    <header class="topbar"><span>工作台 <span class="slash">/</span> 我的跟价</span><span class="environment"><span class="status-dot amber"></span> 演示环境 · 未连接账号</span></header>
+    <div class="workspace">
+      <section class="page-heading"><div><span class="eyebrow">PRICE MONITOR</span><h1>我的跟价</h1><p>及时发现更低挂单，在你的底价范围内调整。</p></div><button class="button secondary" id="connection-button">接入真实账号 <span>↗</span></button></section>
+      <div class="notice"><span class="notice-icon">i</span><div><strong>当前为规则演示</strong><span>示例商品和行情用于验证跟价规则，不会读取账号或修改 Xmeta 真实售价。</span></div></div>
+      <section class="stats" aria-label="监控概览">
+        <article class="stat"><div>监控款数 <span>▦</span></div><strong id="stat-total">—</strong><small>同款合并，每款可设置跟价件数</small></article>
+        <article class="stat"><div>可跟价款数 <span class="text-amber">↘</span></div><strong id="stat-undercut">—</strong><small>可在底价范围内调整</small></article>
+        <article class="stat"><div>底价保护 <span>◇</span></div><strong id="stat-protected">—</strong><small>守住底价，停止继续降价</small></article>
+        <article class="stat"><div>本轮建议降价 <span>¥</span></div><strong id="stat-saving">—</strong><small>所有待调挂单的合计差额</small></article>
+      </section>
+      <section class="panel monitor-panel" id="listings">
+        <div class="panel-heading"><div class="section-title"><h2>在售商品</h2><span class="count" id="listing-count">0</span></div><div class="monitor-actions"><span id="monitor-state" class="monitor-state"><span class="status-dot muted"></span> 已暂停</span><button class="button secondary" id="check-button">↻ 立即检查</button><button class="button primary" id="start-button">▷ 开始演示监控</button></div></div>
+        <div class="table-toolbar"><div class="filters" aria-label="商品筛选"><button class="filter active" data-filter="all">全部商品</button><button class="filter" data-filter="action">需要调整 <span id="action-count">0</span></button><button class="filter" data-filter="protected">底价保护</button></div><span id="last-check">等待首次检查</span></div>
+        <div class="batch-toolbar"><span id="selection-summary">勾选商品后可批量跟价</span><div><button class="text-button" id="clear-selection" disabled>清空选择</button><button class="button primary" id="batch-button" disabled>批量跟价（0 款）</button></div></div>
+        <div class="batch-progress" id="batch-progress" hidden aria-live="polite"><div class="batch-progress-heading"><strong id="batch-summary"></strong><button class="button secondary" id="cancel-batch">停止剩余商品</button></div><p id="batch-hint"></p><details><summary>查看逐项结果</summary><ul id="batch-results"></ul></details></div>
+        <div class="table-scroll"><table><thead><tr><th class="selection-cell"><input type="checkbox" id="select-all" aria-label="全选当前筛选中可跟价的商品"></th><th>商品</th><th>我的最低价</th><th>其他卖家最低价</th><th>最低售价</th><th>建议售价</th><th>状态</th><th class="align-right">操作</th></tr></thead><tbody id="listings-body"><tr><td colspan="8" class="empty">正在加载演示商品…</td></tr></tbody></table></div>
+        <div class="table-footer"><span id="next-check">自动监控已暂停</span><span>同款合并展示 · 按设定件数从最低价开始选取</span></div>
+      </section>
+      <div class="bottom-grid">
+        <section class="panel rules-panel"><div class="panel-heading"><h2>跟价规则</h2><span class="small-badge">本机保存</span></div>
+          <form id="rules-form"><div class="fields-grid"><label>检查间隔 <div class="input-unit"><input id="interval" type="number" min="30" max="3600" step="1" value="60" required><span>秒</span></div></label><label>比最低价再低 <div class="input-unit"><input id="step" type="number" min="0.01" max="10000" step="0.01" value="0.10" required><span>元</span></div></label><label>单次最多降价 <div class="input-unit"><input id="max-drop" type="number" min="0.01" max="100000" step="0.01" value="10.00" required><span>元</span></div></label><label>改价冷却时间 <div class="input-unit"><input id="cooldown" type="number" min="30" max="86400" step="1" value="300" required><span>秒</span></div></label></div>
+          <div class="toggle-row"><div><strong>自动检查，点击后改价</strong><small>监控只更新建议价，不会自动提交真实改价。</small></div><span class="tag lowest">已启用</span></div>
+          <div class="rules-hint">被压价时，目标价为其他卖家最低价减去跟价幅度。自己已是最低价时，其他选中件对齐自己的最低价。每件分别检查底价和降价上限。</div>
+          <div class="rules-hint">真实跟价还须遵守平台限制：同件改价至少间隔 30 分钟，每次售价不得低于改价前的 20%。冷却时间取你的设置与平台要求中较长的一个；分次跟价会显示本次价和最终目标。</div>
+          <button class="button secondary full-width" type="submit">保存规则</button></form>
+        </section>
+        <section class="panel activity-panel" id="activity"><div class="panel-heading"><h2>检查记录</h2><button class="text-button" id="export-button">导出记录 ↓</button></div><div id="activity-list" aria-live="polite"><div class="empty">检查后将在这里显示结果</div></div><div class="activity-footer"><span>行情异常、已售出及触及底价时跳过改价</span><button class="text-button" id="reset-button">重置演示</button></div></section>
+      </div>
+      <footer class="page-footer"><span>Xmeta 跟价助手 <span class="footer-version">/ 本机版 1.1</span></span><span>跟价不能保证成交，请按自己的成本设置底价。</span></footer>
+    </div>
+  </main>
+  <dialog id="edit-dialog"><form id="edit-form"><div class="dialog-heading"><h2>商品跟价设置</h2><button type="button" class="icon-button" data-close="edit-dialog" aria-label="关闭">×</button></div><p id="edit-name"></p><input type="hidden" id="edit-id"><label>最低售价（元）<input id="edit-floor" type="number" min="1" step="0.01" required></label><label class="quantity-setting">最低价跟价件数<input id="edit-follow-count" type="number" min="1" max="100" step="1" value="1" aria-describedby="edit-quantity-hint" required></label><p class="field-hint" id="edit-quantity-hint">包含已有低价件，按自有售价从低到高选取，默认 1 件，最多 100 件；库存不足时按实际件数。触及底价或降幅上限的件会跳过，不递补更高价挂单。</p><label class="checkbox-label"><input id="edit-enabled" type="checkbox"> 开启这款商品的跟价</label><label class="checkbox-label" id="pending-label" hidden><input id="edit-resolve-pending" type="checkbox"> <span id="pending-message">我已在平台核实该款所有待确认挂单的最终售价和保证金状态，解除锁定</span></label><p class="muted-copy">保存设置不会改价。件数、底价和冷却时间按款保留，之后点击跟价时执行。</p><div class="dialog-actions"><button type="button" class="button secondary" data-close="edit-dialog">取消</button><button type="submit" class="button primary">保存设置</button></div></form></dialog>
+  <dialog id="connection-dialog"><div class="dialog-heading"><h2>连接你的 Xmeta</h2><button class="icon-button" data-close="connection-dialog" aria-label="关闭">×</button></div><span class="connection-label">登录信息仅保存在这台电脑</span><p>首次连接请在专用窗口登录。面板不会索取密码或验证码。</p><ol class="connection-steps"><li><strong>打开专用登录窗口</strong><span>在 Xmeta 官方页面正常完成登录。</span></li><li><strong>读取并自动开启跟价</strong><span>可比价商品自动开启，最低售价设为同款当前最低挂单价的 80%。</span></li><li><strong>设置件数，勾选跟价</strong><span>同款合并为一行，默认跟价 1 件，可按款设置件数。一键跟价和批量跟价均按该件数，从自有最低价挂单开始选取。</span></li></ol><p class="muted-copy">每次点击“读取我的出售”都会重设可比价商品的底价，并保留跟价件数。平时请用“立即检查”刷新行情；定时检查也会保留底价。打包、预售及无法识别的商品会跳过。</p><div class="dialog-actions"><button class="button secondary" id="login-button">① 打开登录窗口</button><button class="button primary" id="connect-button">② 读取我的出售</button></div></dialog>
+  <div id="toast" class="toast" role="status" hidden></div>
+  <script type="module" src="./app.js"></script>
+</body>
+</html>
